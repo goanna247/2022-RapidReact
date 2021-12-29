@@ -56,22 +56,6 @@ class Robot : public frc::TimedRobot {
 	void TestInit() override;
 	void TestPeriodic() override;
 
-	// controllers
-	frc::XboxController *driver;
-	frc::XboxController *coDriver;
-
  private:
-	//drivebase 
-	wml::VictorSpx *_leftMotor1;
-	wml::VictorSpx *_leftMotor2;
-	wml::VictorSpx *_leftMotor3;
 
-	wml::VictorSpx *_rightMotor1;
-	wml::VictorSpx *_rightMotor2;
-	wml::VictorSpx *_rightMotor3;
-
-	//intake 
-	wml::VictorSpx *_victorIntake;
-	//hammer time 
-	wml::TalonSrx *_hammerMotor;
 };
