@@ -1,15 +1,15 @@
-#include "Drivebase.h"
+#include "DriveSystem.h"
 
 using namespace wml;
 using namespace wml::controllers;
 
-Drivetrain::Drivetrain(std::string name, Drivetrain &drivetrain, SmartControllerGroup &contGroup) : Strategy(name), _drivetrain(drivetrain), _contGroup(contGroup) {
+DrivetrainManual::DrivetrainManual(std::string name, Drivetrain &drivetrain, SmartControllerGroup &contGroup) : Strategy(name), _drivetrain(drivetrain), _contGroup(contGroup) {
 	Requires(&drivetrain);
 	SetCanBeInterrupted(true);
 	SetCanBeReused(true);
 }
 
-void Drivetrain::OnUpdate(double dt) {
+void DrivetrainManual::OnUpdate(double dt) {
 	_leftPower = abs(_contGroup.Get(ControlMap::DrivetrainLeft)) > ControlMap::XboxDeadzone ? _contGroup.Get(ControlMap::DrivetrainLeft) : 0;
 	_rightPower = abs(_contGroup.Get(ControlMap::DrivetrainRight)) > ControlMap::XboxDeadzone ? _contGroup.Get(ControlMap::DrivetrainRight) : 0;
 

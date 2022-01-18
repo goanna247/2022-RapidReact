@@ -52,6 +52,9 @@
 #include <sensors/BinarySensor.h>
 #include <rev/CANSparkMax.h>
 
+//Poggers Anna stuff 
+#include "TreasureMapper.h"
+
 // WML Rev
 #include <WMLRev.h>
 
@@ -104,20 +107,28 @@ struct RobotMap {
   }; IntakeSystem intakeSystem;
 
   struct DriveSystem {
-    wml::TalonSrx FrontLeft{ ControlMap::frontLeftPort, 2048}, BackLeft{ ControlMap::backLeftPort, 2048};
-    wml::TalonSrx FrontRight{ ControlMap::frontRightPort, 2048}, BackRight{ ControlMap::backRightPort, 2048};
 
-    wml::actuators::MotorVoltageController leftMotors = wml::actuators::MotorVoltageController::Group(FrontLeft, BackLeft);
-    wml::actuators::MotorVoltageController rightMotors = wml::actuators::MotorVoltageController::Group(FrontRight, BackRight);
+		// Drive motors {port, encoderTicks}
+		wml::TalonSrx frontLeftMotor{ControlMap::FLPort, 2048}, backLeftMotor{ControlMap::BLPort, 2048}; //right drive and left drive 
+    wml::TalonSrx frontRightMotor{ ControlMap::FRPort, 2048}, backRightMotor{ ControlMap::BRPort, 2048 };
 
-    wml::Gearbox LGearbox{&leftMotors, &FrontLeft };
-    wml::Gearbox RGearbox{&rightMotors, &FrontRight };
+		// Motor Grouping
+		wml::actuators::MotorVoltageController leftMotors = wml::actuators::MotorVoltageController::Group(frontLeftMotor, backLeftMotor);
+		wml::actuators::MotorVoltageController rightMotors = wml::actuators::MotorVoltageController::Group(frontRightMotor, backRightMotor);
 
-    wml::sensors::NavX navx{};
-    wml::sensors::NavXGyro gyro{navx.Angular(wml::sensors::AngularAxis::YAW)};
+		// Gearboxes
+		wml::Gearbox LGearbox{&leftMotors, &frontLeftMotor};
+		wml::Gearbox RGearbox{&rightMotors, &frontRightMotor};
 
-    wml::DrivetrainConfig drivetrainConfig{LGearbox, RGearbox, &gyro, ControlMap::TrackWidth, ControlMap::TrackDepth, ControlMap::WheelRadius, ControlMap::Mass };
-    wml::control::PIDGains gainsVelocity{"Drivetrain velocity", 1};
-    wml::Drivetrain drivetrain{drivetrainConfig, gainsVelocity };
-  }; DriveSystem driveSystem;
+		wml::sensors::NavX navx{};
+		wml::sensors::NavXGyro gyro{navx.Angular(wml::sensors::AngularAxis::YAW)};
+
+		wml::DrivetrainConfig drivetrainConfig{LGearbox, RGearbox, &gyro, ControlMap::TrackWidth, ControlMap::TrackDepth, ControlMap::WheelRadius, ControlMap::Mass};
+		wml::control::PIDGains gainsVelocity{"Drivetrain Velocity", 1};
+		wml::Drivetrain drivetrain{drivetrainConfig, gainsVelocity};
+	}; DriveSystem driveSystem;
+
+  struct ClimberSystem {
+
+  }; ClimberSystem climberSystem;
 };

@@ -13,17 +13,15 @@ void Robot::RobotInit() {
 	//Init the controllers
 	ControlMap::InitSmartControllerGroup(robotMap.contGroup);
 
-	// belevator = new Belevator(robotMap.belevatorSystem.belevatorMotor, robotMap.belevatorSystem.belevatorSolenoid);
-
 	shooter = new Shooter(robotMap.shooterSystem.leftFlyWheelMotor, robotMap.shooterSystem.rightFlyWheelMotor, robotMap.contGroup);
 	robotMap.shooterSystem.leftFlyWheelMotor.SetInverted(true);
 	robotMap.shooterSystem.rightFlyWheelMotor.SetInverted(true);
 
-	drivetrain = new Drivetrain(robotMap.driveSystem.drivetrainConfig, robotMap.driveSystem.gainsVelocity);
+	drivetrain = new wml::Drivetrain(robotMap.driveSystem.drivetrainConfig, robotMap.driveSystem.gainsVelocity);
 	robotMap.driveSystem.drivetrain.GetConfig().leftDrive.encoder->ZeroEncoder();
 	robotMap.driveSystem.drivetrain.GetConfig().rightDrive.encoder->ZeroEncoder();
 
-	drivetrain->SetDefault(std::make_shared<Drivetrain>("Drivetrain Manual", *drivetrain, robotMap.contGroup));
+	drivetrain->SetDefault(std::make_shared<DrivetrainManual>("Drivetrain Manual", *drivetrain, robotMap.contGroup));
 	drivetrain->StartLoop(100);
 
 	drivetrain->GetConfig().rightDrive.transmission->SetInverted(false);
@@ -31,6 +29,8 @@ void Robot::RobotInit() {
 
 	intake = new Intake(robotMap.intakeSystem.intakeMotor, robotMap.contGroup);
 	robotMap.intakeSystem.intakeMotor.SetInverted(false);
+
+	climber = new Climber(robotMap.contGroup);
 
 	StrategyController::Register(drivetrain);
 	NTProvider::Register(drivetrain);
@@ -64,9 +64,9 @@ void Robot::TeleopInit() {
 	Schedule(drivetrain->GetDefaultStrategy(), true);
 }
 void Robot::TeleopPeriodic() {
-	// belevator->teleopOnUpdate(dt);
 	shooter->teleopOnUpdate(dt);
 	intake->teleopOnUpdate(dt);
+	climber->teleopOnUpdate(dt);
 }
 
 // During Test Logic

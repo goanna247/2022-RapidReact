@@ -34,7 +34,6 @@ struct ControlMap {
 
   // Drivetrain
 
-
   static constexpr double MaxDrivetrainSpeed = 0.6; //never trust drivers
   static constexpr double TrackWidth = 0.56;
   static constexpr double TrackDepth = 0.60;
@@ -46,6 +45,12 @@ struct ControlMap {
 
   static constexpr int backRightPort = 99;
   static constexpr int backLeftPort = 99;
+
+  static constexpr int FRPort = 99;
+  static constexpr int BRPort = 99;
+
+  static constexpr int FLPort = 99;
+  static constexpr int BLPort = 99;
 
 
   // Intake
