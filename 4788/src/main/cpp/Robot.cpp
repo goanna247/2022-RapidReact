@@ -19,21 +19,32 @@ void Robot::RobotInit() {
 	robotMap.shooterSystem.leftFlyWheelMotor.SetInverted(true);
 	robotMap.shooterSystem.rightFlyWheelMotor.SetInverted(true);
 
+	drivetrain = new Drivetrain(robotMap.driveSystem.drivetrainConfig, robotMap.driveSystem.gainsVelocity);
+	robotMap.driveSystem.drivetrain.GetConfig().leftDrive.encoder->ZeroEncoder();
+	robotMap.driveSystem.drivetrain.GetConfig().rightDrive.encoder->ZeroEncoder();
 
+	drivetrain->SetDefault(std::make_shared<Drivetrain>("Drivetrain Manual", *drivetrain, robotMap.contGroup));
+	drivetrain->StartLoop(100);
+
+	drivetrain->GetConfig().rightDrive.transmission->SetInverted(false);
+	drivetrain->GetConfig().leftDrive.transmission->SetInverted(true);
 
 	intake = new Intake(robotMap.intakeSystem.intakeMotor, robotMap.contGroup);
 	robotMap.intakeSystem.intakeMotor.SetInverted(false);
+
+	StrategyController::Register(drivetrain);
+	NTProvider::Register(drivetrain);
 }
 void Robot::RobotPeriodic() {
 	currentTimeStamp = (double)frc::Timer::GetFPGATimestamp();
 	dt = currentTimeStamp - lastTimeStamp;
 
-	// StrategyController::Update(dt);
+	StrategyController::Update(dt);
 
 	// robotMap.controlSystem.compressor.SetTarget(wml::actuators::BinaryActuatorState::kForward);
 	// robotMap.controlSystem.compressor.Update(dt);
 
-	// NTProvider::Update();
+	NTProvider::Update();
 
 	lastTimeStamp = currentTimeStamp;
 }
@@ -49,7 +60,9 @@ void Robot::AutonomousInit() {}
 void Robot::AutonomousPeriodic() {}
 
 // Manual Robot Logic
-void Robot::TeleopInit() {}
+void Robot::TeleopInit() {
+	Schedule(drivetrain->GetDefaultStrategy(), true);
+}
 void Robot::TeleopPeriodic() {
 	// belevator->teleopOnUpdate(dt);
 	shooter->teleopOnUpdate(dt);
