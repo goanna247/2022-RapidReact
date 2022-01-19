@@ -54,10 +54,15 @@ struct ControlMap {
 
 
   // Intake
+  static constexpr int intakeMotorPort = 99;
+  static constexpr int LeftIntakePort1 = 99;
+  static constexpr int LeftIntakePort2 = 99;
+  static constexpr int RightIntakePort1 = 99;
+  static constexpr int RightIntakePort2 = 99;
 
   // Shooter
-  static constexpr int leftFlyWheelPort = 10;
-  static constexpr int rightFlyWheelPort = 13;
+  static constexpr int leftFlyWheelPort = 6;
+  static constexpr int rightFlyWheelPort = 7;
   static constexpr double flyWheelMass = 3;
 
     //shooter PID stuff 
@@ -70,8 +75,14 @@ struct ControlMap {
 	static constexpr double derror = 0;
 	static constexpr double previousError = 0;
 
-  // Climber
 
+  // Climber
+  static constexpr int ClimberLeftPort1 = 99;
+  static constexpr int ClimberLeftPort2 = 99;
+  static constexpr int ClimberRightPort1 = 99;
+  static constexpr int ClimberRightPort2 = 99;
+
+  inline static bool ClimberToggle = false;
 
   // ------------------ Controls ------------------
 
@@ -86,5 +97,5 @@ struct ControlMap {
   inline static const wml::controllers::tAxis ShooterManualSpin{ CoDriver, XboxController::kLeftThrottle }; //used for manual control or testing the shooter
 
   // Climber
-
+  inline static const wml::controllers::tButton climber{ CoDriver, XboxController::kY };
 };

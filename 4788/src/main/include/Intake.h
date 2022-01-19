@@ -5,7 +5,7 @@
 
 class Intake {
  public:
-	Intake(wml::TalonSrx &intakeMotor, wml::controllers::SmartControllerGroup &contGroup);
+	Intake(wml::actuators::DoubleSolenoid &leftIntakeActuation, wml::actuators:::DoubleSolenoid &rightIntakeActuation, wml::TalonSrx &intakeMotor, wml::controllers::SmartControllerGroup &contGroup);
 
 
 	void teleopOnUpdate(double dt);
@@ -13,5 +13,7 @@ class Intake {
  private:
 	wml::controllers::SmartControllerGroup &_contGroup;
 
+	wml::actuators::DoubleSolenoid &_leftIntakeActuation;
+	wml::actuators::DoubleSolenoid &_rightIntakeActuation;
 	wml::TalonSrx &_intakeMotor;
 };

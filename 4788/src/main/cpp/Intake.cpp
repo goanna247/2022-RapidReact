@@ -4,7 +4,7 @@
 using namespace wml;
 using namespace wml::controllers;
 
-Intake::Intake(wml::TalonSrx &intakeMotor, SmartControllerGroup &contGroup) : _intakeMotor(intakeMotor), _contGroup(contGroup) {
+Intake::Intake(wml::actuators::DoubleSolenoid &leftIntakeActuation, wml::actuators::DoubleSolenoid &rightIntakeActuation, wml::TalonSrx &intakeMotor, SmartControllerGroup &contGroup) : _leftIntakeActuation(leftIntakeActuation),_rightIntakeActuation(rightIntakeActuation), _intakeMotor(intakeMotor), _contGroup(contGroup) {
 
 }
 
@@ -13,3 +13,5 @@ void Intake::teleopOnUpdate(double dt) {
 
 	_intakeMotor.Set(intakeManualSpeed);
 }
+
+//add in 2 pistons 

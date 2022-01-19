@@ -27,10 +27,10 @@ void Robot::RobotInit() {
 	drivetrain->GetConfig().rightDrive.transmission->SetInverted(false);
 	drivetrain->GetConfig().leftDrive.transmission->SetInverted(true);
 
-	intake = new Intake(robotMap.intakeSystem.intakeMotor, robotMap.contGroup);
+	intake = new Intake(robotMap.intakeSystem.leftIntakeActuation, robotMap.intakeSystem.rightIntakeActuation, robotMap.intakeSystem.intakeMotor, robotMap.contGroup);
 	robotMap.intakeSystem.intakeMotor.SetInverted(false);
 
-	climber = new Climber(robotMap.contGroup);
+	climber = new Climber(robotMap.climberSystem.leftClimber, robotMap.climberSystem.rightClimber, robotMap.contGroup);
 
 	StrategyController::Register(drivetrain);
 	NTProvider::Register(drivetrain);

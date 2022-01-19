@@ -30,6 +30,7 @@ void Shooter::teleopOnUpdate(double dt) {
 	shooterManualSpeed = fabs(_contGroup.Get(ControlMap::ShooterManualSpin)) > ControlMap::TriggerDeadzone ? _contGroup.Get(ControlMap::ShooterManualSpin) : 0;
 
 	// _flyWheel.transmission->SetVoltage(shooterManualSpeed);
+	//change to ^ this when wml updates 
 
 	_leftFlyWheelMotor.Set(shooterManualSpeed);
 	_rightFlyWheelMotor.Set(shooterManualSpeed);

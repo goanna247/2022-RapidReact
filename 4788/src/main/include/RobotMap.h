@@ -79,39 +79,30 @@ struct RobotMap {
   // }; ControlSystem controlSystem;
 
   /**
-   * Example elevator system 
-   * includes a TalonSrx motor controlling the upwards linear motion
-   * includes a solenoid to move the elevator up and down
-   */
-  // struct BelevatorSystem {
-  //   wml::TalonSrx belevatorMotor{ControlMap::BelevatorMotorPort, 2048};
-  //   wml::actuators::DoubleSolenoid belevatorSolenoid{ ControlMap::PCModule, ControlMap::BelevatorSolenoidPort, 0.1};
-  // }; BelevatorSystem belevatorSystem;
-
-  /**
    * Shooter subsystem 
    * 2 spark maxs into a gearbox 
-  //  */
+   */
   struct ShooterSystem {
     // wml::SparkMax leftFlyWheelMotor{ 10, wml::SparkMax::MotorType::kNEO , 42 };
     // wml::SparkMax rightFlyWheelMotor{ ControlMap::rightFlyWheelPort, wml::SparkMax::MotorType::kNEO, 42 };
-    rev::CANSparkMax leftFlyWheelMotor{6, rev::CANSparkMaxLowLevel::MotorType::kBrushless};
-    rev::CANSparkMax rightFlyWheelMotor{7, rev::CANSparkMaxLowLevel::MotorType::kBrushless};
+    rev::CANSparkMax leftFlyWheelMotor{ControlMap::leftFlyWheelPort, rev::CANSparkMaxLowLevel::MotorType::kBrushless};
+    rev::CANSparkMax rightFlyWheelMotor{ControlMap::rightFlyWheelPort, rev::CANSparkMaxLowLevel::MotorType::kBrushless};
 
     // wml::actuators::MotorVoltageController shooterMotorGroup = wml::actuators::MotorVoltageController::Group(leftFlyWheelMotor, rightFlyWheelMotor);
     // wml::Gearbox ShooterGearbox{&shooterMotorGroup, &leftFlyWheelMotor};
   }; ShooterSystem shooterSystem;
 
   struct IntakeSystem {
-    wml::TalonSrx intakeMotor{ 99, 2048 };
+    wml::TalonSrx intakeMotor{ ControlMap::intakeMotorPort, 2048 };
+
+    wml::actuators::DoubleSolenoid leftIntakeActuation{ ControlMap::PCModule, wml::actuators::PneumaticsModuleType::kCTRE ,ControlMap::LeftIntakePort1, ControlMap::LeftIntakePort2, 0.1};
+    wml::actuators::DoubleSolenoid rightIntakeActuation{ ControlMap::PCModule, wml::actuators::PneumaticsModuleType::kCTRE,ControlMap::RightIntakePort1, ControlMap::RightIntakePort2, 0.1};
   }; IntakeSystem intakeSystem;
 
   struct DriveSystem {
-
 		// Drive motors {port, encoderTicks}
 		wml::TalonSrx frontLeftMotor{ControlMap::FLPort, 2048}, backLeftMotor{ControlMap::BLPort, 2048}; //right drive and left drive 
     wml::TalonSrx frontRightMotor{ ControlMap::FRPort, 2048}, backRightMotor{ ControlMap::BRPort, 2048 };
-
 		// Motor Grouping
 		wml::actuators::MotorVoltageController leftMotors = wml::actuators::MotorVoltageController::Group(frontLeftMotor, backLeftMotor);
 		wml::actuators::MotorVoltageController rightMotors = wml::actuators::MotorVoltageController::Group(frontRightMotor, backRightMotor);
@@ -129,6 +120,7 @@ struct RobotMap {
 	}; DriveSystem driveSystem;
 
   struct ClimberSystem {
-
+    wml::actuators::DoubleSolenoid leftClimber{ ControlMap::PCModule, wml::actuators::PneumaticsModuleType::kCTRE ,ControlMap::ClimberLeftPort1, ControlMap::ClimberLeftPort2, 0.1};
+    wml::actuators::DoubleSolenoid rightClimber{ ControlMap::PCModule, wml::actuators::PneumaticsModuleType::kCTRE,ControlMap::ClimberRightPort1, ControlMap::ClimberRightPort2, 0.1};
   }; ClimberSystem climberSystem;
 };
