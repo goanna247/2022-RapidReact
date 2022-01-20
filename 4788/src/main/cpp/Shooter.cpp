@@ -79,7 +79,7 @@ void Shooter::testing(double dt) {
   _shooterSystem.leftFlyWheelMotor.Set(shooterManualSpeed);
   _shooterSystem.rightFlyWheelMotor.Set(shooterManualSpeed);
 
-  std::cout << shooterManualSpeed << std::endl;
+  // std::cout << shooterManualSpeed << std::endl;
   // std::cout << _leftFlyWheelMotor.GetEncoder()->GetEncoderAngularVelocity() << std::endl;
   // std::cout << _rightFlyWheelMotor.encoder->GetEncoderAngularVelocity() << std::endl;
 

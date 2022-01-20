@@ -1,5 +1,6 @@
 #include "Robot.h"
 #include "Intake.h"
+#include <iostream>
 
 using namespace frc;
 using namespace wml;
@@ -7,6 +8,8 @@ using namespace wml;
 double currentTimeStamp;
 double lastTimeStamp;
 double dt;
+
+wml::sensors::DigitalEncoder encoder{0,1,2048};
 
 // General Robot Logic
 void Robot::RobotInit() {
@@ -21,6 +24,8 @@ void Robot::RobotInit() {
   shooter = new Shooter(robotMap.shooterSystem, robotMap.contGroup);
   robotMap.shooterSystem.leftFlyWheelMotor.SetInverted(false);
   robotMap.shooterSystem.rightFlyWheelMotor.SetInverted(false);
+
+  // frc::Encoder encoder{0, 1};
 
   // intake = new Intake(robotMap.intakeSystem, robotMap.contGroup);
   // robotMap.intakeSystem.intake.SetInverted(false);
@@ -74,7 +79,7 @@ void Robot::TeleopInit() {
 }
 void Robot::TeleopPeriodic() {
   shooter->teleopOnUpdate(dt);
-
+  std::cout << encoder.GetEncoderTickVelocity() << std::endl;
 }
 
 // During Test Logic
