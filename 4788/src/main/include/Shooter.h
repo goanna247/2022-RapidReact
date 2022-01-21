@@ -13,7 +13,7 @@
 enum class TeleopShooter {
   kAuto,
   kManual,
-  kStill, //like stationary but easier to spell
+  kStill, //like stationary but easier to spell (kIdle)
   kTesting
   // kStill, 
   // kSpinUp,
@@ -40,7 +40,7 @@ class Shooter {
    * Sets the flywheel to a specific speed,
    * later can be called in teleopOnUpdate for different distances.
    */
-  double speed(double metersPerSecond);
+  double speed(double metersPerSecond, double dt);
 
   /**
    * manual control of the shooter. 
@@ -53,10 +53,7 @@ class Shooter {
   TeleopShooter _teleopShooter{ TeleopShooter::kTesting};
   wml::controllers::SmartControllerGroup &_contGroup;
 
-  // rev::CANSparkMax &_leftFlyWheelMotor;
-  // rev::CANSparkMax &_rightFlyWheelMotor;
-  // wml::Gearbox &_flyWheel;
-
   double shooterManualSpeed = 0;
+  double shooterTestingSpeed = 0;
   RobotMap::ShooterSystem &_shooterSystem;
 };
