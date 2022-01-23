@@ -52,8 +52,8 @@
 #include <sensors/BinarySensor.h>
 #include <rev/CANSparkMax.h>
 
-//Poggers Anna stuff 
-// #include "TreasureMapper.h"
+//Poggers Auto stuff 
+#include "MP_Trajedy.h"
 
 // WML Rev
 #include <WMLRev.h>
