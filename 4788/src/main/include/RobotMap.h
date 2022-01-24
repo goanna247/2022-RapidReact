@@ -84,6 +84,8 @@ struct RobotMap {
     wml::SparkMax rightFlyWheelMotor{ 11, wml::SparkMax::MotorType::kNEO, 42 };
     wml::SparkMax centerFlyWheelMotor{ 7, wml::SparkMax::MotorType::kNEO, 42 };
 
+    // wml::sensors::DigitalEncoder encoder{0,1,2048};
+
     wml::actuators::MotorVoltageController shooterMotorGroup = wml::actuators::MotorVoltageController::Group(leftFlyWheelMotor, rightFlyWheelMotor, centerFlyWheelMotor);
     wml::Gearbox shooterGearbox{&shooterMotorGroup, &leftFlyWheelMotor};
   }; ShooterSystem shooterSystem;

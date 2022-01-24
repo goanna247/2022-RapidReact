@@ -8,7 +8,7 @@ double currentTimeStamp;
 double lastTimeStamp;
 double dt;
 
-wml::sensors::DigitalEncoder encoder{0,1,2048};
+
 
 // General Robot Logic
 void Robot::RobotInit() {

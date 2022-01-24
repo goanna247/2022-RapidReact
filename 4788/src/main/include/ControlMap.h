@@ -81,6 +81,8 @@ struct ControlMap {
 
   // Shooter
   inline static const wml::controllers::tAxis ShooterManualSpin{ CoDriver, XboxController::kLeftThrottle }; //used for manual control or testing the shooter
+  inline static const wml::controllers::tButton ShooterFar{ CoDriver, XboxController::kBumperLeft };
+
 
   // Drivetrain
   inline static const wml::controllers::tAxis drivebaseL{Driver, XboxController::kLeftYAxis};

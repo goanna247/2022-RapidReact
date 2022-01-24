@@ -72,9 +72,13 @@ void Shooter::testing(double dt) {
 
   // _shooterSystem.shooterGearbox.transmission->SetVoltage(shooterTestingSpeed);
 
-  _shooterSystem.leftFlyWheelMotor.Set(shooterTestingSpeed);
+  // shooterTestingSpeed *= 0.8;
+
+  std::cout << shooterTestingSpeed << std::endl;
+
+  // _shooterSystem.leftFlyWheelMotor.Set(shooterTestingSpeed);
   _shooterSystem.rightFlyWheelMotor.Set(shooterTestingSpeed);
-  _shooterSystem.centerFlyWheelMotor.Set(shooterTestingSpeed);
+  // _shooterSystem.centerFlyWheelMotor.Set(shooterTestingSpeed);
 
   // std::cout << shooterManualSpeed << std::endl;
   // std::cout << _leftFlyWheelMotor.GetEncoder()->GetEncoderAngularVelocity() << std::endl;
