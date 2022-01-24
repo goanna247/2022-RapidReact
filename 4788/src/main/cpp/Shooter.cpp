@@ -74,11 +74,20 @@ void Shooter::testing(double dt) {
 
   // shooterTestingSpeed *= 0.8;
 
-  std::cout << shooterTestingSpeed << std::endl;
+  // std::cout << shooterTestingSpeed << std::endl;
 
-  // _shooterSystem.leftFlyWheelMotor.Set(shooterTestingSpeed);
+  _shooterSystem.leftFlyWheelMotor.Set(shooterTestingSpeed);
   _shooterSystem.rightFlyWheelMotor.Set(shooterTestingSpeed);
-  // _shooterSystem.centerFlyWheelMotor.Set(shooterTestingSpeed);
+  _shooterSystem.centerFlyWheelMotor.Set(shooterTestingSpeed);
+
+  //get the average angular velocity of all 3 motors
+  // double encoderValue = _shooterSystem.leftFlyWheelMotor.GetSensorVelocity();
+  // double encoderValue = _shooterSystem.leftFlyWheelMotor.GetSensorVelocity();
+  double encoderValue = _shooterSystem.leftFlyWheelMotor.GetEncoderTicks();
+  //  + _shooterSystem.rightFlyWheelMotor.GetSensorVelocity() + _shooterSystem.centerFlyWheelMotor.GetSensorVelocity()) / 3;
+  //  + _shooterSystem.rightFlyWheelMotor.GetAngularVelocity() + _shooterSystem.centerFlyWheelMotor.GetAngularVelocity()) / 3;
+
+  // std::cout << encoderValue << std::endl;
 
   // std::cout << shooterManualSpeed << std::endl;
   // std::cout << _leftFlyWheelMotor.GetEncoder()->GetEncoderAngularVelocity() << std::endl;

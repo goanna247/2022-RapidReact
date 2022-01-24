@@ -80,9 +80,9 @@ struct RobotMap {
    * 2 spark maxs into a gearbox 
    */
   struct ShooterSystem {
-    wml::SparkMax leftFlyWheelMotor{ 6, wml::SparkMax::MotorType::kNEO , 42 };
-    wml::SparkMax rightFlyWheelMotor{ 11, wml::SparkMax::MotorType::kNEO, 42 };
-    wml::SparkMax centerFlyWheelMotor{ 7, wml::SparkMax::MotorType::kNEO, 42 };
+    wml::SparkMax leftFlyWheelMotor{ 6, wml::SparkMax::MotorType::kNEO };
+    wml::SparkMax rightFlyWheelMotor{ 11, wml::SparkMax::MotorType::kNEO };
+    wml::SparkMax centerFlyWheelMotor{ 7, wml::SparkMax::MotorType::kNEO };
 
     // wml::sensors::DigitalEncoder encoder{0,1,2048};
 
