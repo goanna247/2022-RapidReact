@@ -16,18 +16,33 @@ void Shooter::teleopOnUpdate(double dt) {
   switch (_teleopShooter) {
     case TeleopShooter::kAuto:
       //left bumper for close shot, right bumper for far shot, POV button 
-      power = speed(4, dt);
+      
       std::cout << "Power: " << power << std::endl;
       if ((_contGroup.GetController(1).Get(ControlMap::ShortShoot))) {
         // _shooterSystem.rightFlyWheelMotor.Set(power);
         // _shooterSystem.centerFlyWheelMotor.Set(power);
         //set power to 0.1 till button press then PID loop
-
       }
       // shooterTestingSpeed = (_contGroup.GetController(1).Get(ControlMap::ShooterManualSpin)) > ControlMap::TriggerDeadzone ? _contGroup.GetController(1).Get(ControlMap::ShooterManualSpin) : 0;
       // _shooterSystem.leftFlyWheelMotor.Set(shooterTestingSpeed);
       // _shooterSystem.rightFlyWheelMotor.Set(shooterTestingSpeed);
       // _shooterSystem.centerFlyWheelMotor.Set(shooterTestingSpeed);
+
+      
+
+      if (_contGroup.GetController(1).Get(ControlMap::PIDON)) {
+        shooterPID = true;
+      }
+
+      if (shooterPID) {
+        power = speed(4, dt);
+      } else {
+        power = 0.1;
+      }
+
+      _shooterSystem.leftFlyWheelMotor.Set(power);
+      _shooterSystem.rightFlyWheelMotor.Set(power);
+      _shooterSystem.centerFlyWheelMotor.Set(power);
 
       break;
     case TeleopShooter::kStill:

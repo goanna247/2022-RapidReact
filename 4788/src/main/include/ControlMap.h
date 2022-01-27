@@ -55,6 +55,7 @@ struct ControlMap {
   static constexpr int leftFlyWheelPort = 10;
   static constexpr int rightFlyWheelPort = 13;
   static constexpr double flyWheelMass = 3;
+  static bool shooterPID = false;
 
   //shooter PID stuff 
   inline static double kp = 0.1;
@@ -77,6 +78,7 @@ struct ControlMap {
   // Shooter
   inline static const wml::controllers::tAxis ShooterManualSpin{ CoDriver, XboxController::kLeftThrottle }; //used for manual control or testing the shooter
   inline static const wml::controllers::tButton ShortShoot{ CoDriver, XboxController::kBumperLeft };
+  inline static const wml::controllers::tButton PIDON{ CoDriver, XboxController::kBumperRight };
 
   // Drivetrain
   inline static const wml::controllers::tAxis drivebaseL{Driver, XboxController::kLeftYAxis};
