@@ -50,10 +50,11 @@ class Shooter {
   void testing(double dt);
 
  private:
-  TeleopShooter _teleopShooter{ TeleopShooter::kTesting};
+  TeleopShooter _teleopShooter{ TeleopShooter::kAuto};
   wml::controllers::SmartControllerGroup &_contGroup;
 
   double shooterManualSpeed = 0;
   double shooterTestingSpeed = 0;
   RobotMap::ShooterSystem &_shooterSystem;
+  double shooterSpeed;
 };
