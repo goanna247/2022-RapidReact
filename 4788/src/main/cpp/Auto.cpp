@@ -47,5 +47,4 @@ void Auto::periodic(double dt) {
   rightPower = output.second;
 
   _drivebaseSystem.drivetrain.Set(leftPower, rightPower);
-
 }
