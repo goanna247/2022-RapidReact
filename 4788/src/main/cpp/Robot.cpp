@@ -1,5 +1,6 @@
 #include "Robot.h"
 #include "Intake.h"
+#include "Strategy/DrivetrainTrajectoryStrategy.h"
 
 using namespace frc;
 using namespace wml;
@@ -8,18 +9,30 @@ double currentTimeStamp;
 double lastTimeStamp;
 double dt;
 
+template<typename Terminator>
+void t2000(Terminator terminate) {
+  std::cout << terminate << " Target Acquired" << std::endl;
+}
+
 // General Robot Logic
 void Robot::RobotInit() {
+
+  trajectories.build();
+
   //Init the controllers
   ControlMap::InitSmartControllerGroup(robotMap.contGroup);
 
   // shooter = new Shooter(robotMap.shooterSystem.leftFlyWheelMotor, robotMap.shooterSystem.rightFlyWheelMotor, robotMap.contGroup);
-  shooter = new Shooter(robotMap.shooterSystem, robotMap.contGroup);
-  robotMap.shooterSystem.leftFlyWheelMotor.SetInverted(true);
-  robotMap.shooterSystem.rightFlyWheelMotor.SetInverted(true);
+  // shooter = new Shooter(robotMap.shooterSystem, robotMap.contGroup);
+  // shooter->SetDefault(std::make_shared<ShooterManualStrategy>("Shooter teleop strategy", *shooter, robotMap.contGroup));
+  // StrategyController::Register(shooter);
+
+  // robotMap.shooterSystem.shooterGearbox.transmission->SetInverted(true);
 
   intake = new Intake(robotMap.intakeSystem, robotMap.contGroup);
   robotMap.intakeSystem.intake.SetInverted(false);
+
+  // climber = new Climber(robotMap.climberSystem, robotMap.contGroup);
 
   drivetrain = new Drivetrain(robotMap.drivebaseSystem.drivetrainConfig, robotMap.drivebaseSystem.gainsVelocity);
 
@@ -31,13 +44,9 @@ void Robot::RobotInit() {
   drivetrain->SetDefault(std::make_shared<DrivetrainManual>("Drivetrain Manual", *drivetrain, robotMap.contGroup));
   drivetrain->StartLoop(100);
 
-  robotMap.drivebaseSystem.dbRightMotor1.SetInverted(true);
-
   //Invert one side of our drivetrain so it'll drive straight
   drivetrain->GetConfig().leftDrive.transmission->SetInverted(true);
   drivetrain->GetConfig().rightDrive.transmission->SetInverted(false);
-
-  autonomous = new Auto(robotMap.drivebaseSystem);
 
   // Register our systems to be called via strategy
   StrategyController::Register(drivetrain);
@@ -48,7 +57,12 @@ void Robot::RobotPeriodic() {
   currentTimeStamp = (double)frc::Timer::GetFPGATimestamp();
   dt = currentTimeStamp - lastTimeStamp;
 
+  // t2000("<Anna>");
+
   StrategyController::Update(dt);
+  // shooter->update(dt);
+  // robotMap.controlSystem.compressor.SetTarget(wml::actuators::BinaryActuatorState::kForward);
+  // robotMap.controlSystem.compressor.Update(dt);
   NTProvider::Update();
 
   lastTimeStamp = currentTimeStamp;
@@ -58,23 +72,26 @@ void Robot::RobotPeriodic() {
 void Robot::DisabledInit() {
   InterruptAll(true);
 }
-void Robot::DisabledPeriodic() {}
+void Robot::DisabledPeriodic() {
+  // climber->onDisable(dt);
+}
 
 // Auto Robot Logic
 void Robot::AutonomousInit() {
-  autonomous->init();
+  auto testStrat = std::make_shared<DrivetrainTrajectoryStrategy>("testStrat", *drivetrain, trajectories.test);
+  bool success = Schedule(testStrat);
+  std::cout << "TEST " << success << std::endl;
 }
 void Robot::AutonomousPeriodic() {
-  autonomous->periodic(dt);
 }
 
 // Manual Robot Logic
 void Robot::TeleopInit() {
   Schedule(drivetrain->GetDefaultStrategy(), true);
+  // Schedule(shooter->GetDefaultStrategy(), true);
 }
 void Robot::TeleopPeriodic() {
-  shooter->teleopOnUpdate(dt);
-  intake->teleopOnUpdate(dt);
+  // intake->teleopOnUpdate(dt);
 }
 
 // During Test Logic

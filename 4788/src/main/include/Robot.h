@@ -7,9 +7,10 @@
 #include "Shooter.h"
 #include "Drivebase.h"
 #include "Intake.h"
+#include "Trajectories.h"
 
-// Auto
-#include "Auto.h"
+#include "Strategy/ShooterStrategy.h"
+
 
 class Robot : public frc::TimedRobot, protected wml::StrategyController, protected wml::NTProvider {
 public:
@@ -49,8 +50,9 @@ public:
 
 private:
   RobotMap robotMap;
+  Trajectories trajectories;
   wml::Drivetrain *drivetrain;
-  Shooter *shooter;
+  // Shooter *shooter;
   Intake *intake;
-  Auto *autonomous;
+  // Climber *climber;
 };
