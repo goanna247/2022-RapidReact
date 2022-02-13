@@ -65,6 +65,8 @@ void Robot::RobotPeriodic() {
   // robotMap.controlSystem.compressor.Update(dt);
   NTProvider::Update();
 
+  std::cout << "navX: " << robotMap.drivebaseSystem.gyro.GetAngle() << std::endl;
+
   lastTimeStamp = currentTimeStamp;
 }
 
