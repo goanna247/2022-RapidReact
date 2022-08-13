@@ -19,6 +19,9 @@
 #include "Strategy/GetOutStrategy.h"
 #include "Strategy/VisionAlignment.h"
 
+#include "frc/DigitalOutput.h"
+#include "frc/Relay.h"
+
 
 class Robot : public frc::TimedRobot, protected wml::StrategyController, protected wml::NTProvider, protected wml::loops::LoopSystem {
 public:
@@ -67,10 +70,19 @@ private:
   Climber *climber;
   Vision *vision;
 
+  frc::Relay light{0, frc::Relay::Direction::kForwardOnly};
+
   Auto _auto;
 
   bool outToggle = false;
   bool climberToggle = false;
   bool isAiming = false;
   bool isDistance = false;
+  bool aimToggle = true;
+  bool previousAiming = true;
+
+  wml::actuators::DoubleSolenoid lightRelay{ ControlMap::pcModule, wml::actuators::PneumaticsModuleType::kREV, 3, 7, 0.1, "ahhhh"};
 };
+
+
+//put interupt inside the strategy itself

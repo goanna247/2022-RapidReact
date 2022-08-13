@@ -7,6 +7,9 @@
 #include "RobotControl.h"
 #include "control/MotorFilters.h"
 #include "DriveToDistanceStrategy.h"
+#include <photonlib/PhotonCamera.h>
+#include <photonlib/PhotonUtils.h>
+
 
 class VisionAlignment : public wml::Strategy {
  public:
@@ -22,6 +25,7 @@ class VisionAlignment : public wml::Strategy {
   double _lastYaw = 0;
   double _accSpeed = 0.2;
   bool _track = false;
+  photonlib::PhotonCamera photonCamera{"Harry"};
 };  // moves robot to align with tape
 
 class VisionSnapStrat : public wml::Strategy {

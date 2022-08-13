@@ -91,7 +91,6 @@ struct RobotMap {
     wml::SparkMax rightFlyWheelMotor{ ControlMap::Shooter::rightFlyWheelPort, wml::SparkMax::MotorType::kNEO, 42};
     wml::SparkMax centerFlyWheelMotor{ ControlMap::Shooter::centerFlyWheelPort, wml::SparkMax::MotorType::kNEO, 42};
 
-
     wml::actuators::MotorVoltageController shooterMotorGroup = wml::actuators::MotorVoltageController::Group(
       leftFlyWheelMotor,
       rightFlyWheelMotor,
@@ -138,4 +137,8 @@ struct RobotMap {
   struct ClimberSystem {
     wml::actuators::DoubleSolenoid climberSolenoid{ ControlMap::pcModule, wml::actuators::PneumaticsModuleType::kREV, ControlMap::Climber::climberPort1, ControlMap::Climber::climberPort2, 0.1, "Nicole"};
   }; ClimberSystem climberSystem;
+
+  struct VisionSystem {
+    
+  }; VisionSystem visionSystem;
 };

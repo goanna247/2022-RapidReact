@@ -3,6 +3,8 @@
 #include "Strategy/VisionAlignment.h"
 #include "ControlMap.h"
 
+using namespace photonlib;
+
 VisionAlignment::VisionAlignment(std::string name, Drivetrain &drivetrain, bool track) : wml::Strategy(name), _drivetrain(drivetrain), _drivetrainAngleStrategy("VisionAngle", drivetrain, _lastYaw), _track(track){
   Requires(&drivetrain);
   SetCanBeInterrupted(true);
@@ -15,6 +17,10 @@ void VisionAlignment::OnStart() {
 //drivetrain snap strat 
 void VisionAlignment::OnUpdate(double dt) {
   double leftPower = 0, rightPower = 0;
+
+  // photonCamera.photonLib::SetLED
+  std::cout << photonCamera.GetLEDMode() << std::endl;
+  photonCamera.SetLEDMode(LEDMode::kOn);
 
   double xCords = _visionTable->GetEntry("targetPixelsX").GetDouble(0); 
   double yCords = _visionTable->GetEntry("targetPixelsY").GetDouble(0);
@@ -56,14 +62,14 @@ VisionSnapStrat::VisionSnapStrat(std::string name) : wml::Strategy(name) {
 
 void VisionSnapStrat::OnUpdate(double dt) {
   // std::cout << "Fuck" << std::endl;
-  auto inst = nt::NetworkTableInstance::GetDefault();
-  auto snapTable = inst.GetTable("Snap vision stuff");
-  // snapTable->GetEntry("isOnTarget").SetBoolean(isInnerCircle);
+  // auto inst = nt::NetworkTableInstance::GetDefault();
+  // auto snapTable = inst.GetTable("Snap vision stuff");
+  // // snapTable->GetEntry("isOnTarget").SetBoolean(isInnerCircle);
 
-  double pitch = _visionTable->GetEntry("targetPitch").GetDouble(0);
+  // double pitch = _visionTable->GetEntry("targetPitch").GetDouble(0);
 
-  double newSpeed = (fixSpeed2-fixSpeed1)/(fixPitch2-fixPitch1)*(pitch-fixPitch1)+fixSpeed1;
-  snapTable->GetEntry("newSpeed").SetDouble(newSpeed);
+  // double newSpeed = (fixSpeed2-fixSpeed1)/(fixPitch2-fixPitch1)*(pitch-fixPitch1)+fixSpeed1;
+  // snapTable->GetEntry("newSpeed").SetDouble(newSpeed);
 
 
   // if (pitch <= -18 && pitch >= -22) {

@@ -4,7 +4,7 @@
 
 static wml::control::PIDGains &getAngleGains() {
   // static wml::control::PIDGains gains{"AngleStratGains", 0.015, 0.01, 0, 0.06};
-  static wml::control::PIDGains gains{"AngleStratGains", 0.015, 0.01, 0, 0.06};
+  static wml::control::PIDGains gains{"AngleStratGains", 0.02, 0.01, 0, 0.06};
   return gains;
 };
 

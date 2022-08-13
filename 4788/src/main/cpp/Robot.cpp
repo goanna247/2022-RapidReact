@@ -51,7 +51,7 @@ void Robot::RobotInit() {
   robotMap.drivebaseSystem.leftMotor.SetUpdateRate(200);
   robotMap.drivebaseSystem.rightMotor.SetUpdateRate(200);
   // robotMap.drivebaseSystem.gyro
-  
+
   // Set the default strategy for drivetrain to manual
   drivetrain->SetDefault(std::make_shared<DrivetrainManual>("Drivetrain Manual", *drivetrain, robotMap.contGroup));
   drivetrain->StartLoop(100);
@@ -60,12 +60,14 @@ void Robot::RobotInit() {
   drivetrain->GetConfig().leftDrive.transmission->SetInverted(true);
   drivetrain->GetConfig().rightDrive.transmission->SetInverted(false);
 
+  // light.
+
   // Register our systems to be called via strategy
   StrategyController::Register(climber);
   StrategyController::Register(drivetrain);
   StrategyController::Register(shooter);
   StrategyController::Register(intake);
-  StrategyController::Register(vision);
+  // StrategyController::Register(vision);
   NTProvider::Register(drivetrain);
 
   trajectories.build();
@@ -82,6 +84,7 @@ void Robot::RobotPeriodic() {
   dt = currentTimeStamp - lastTimeStamp;
 
   // t2000("<Anna>");
+  
 
   // StrategyController::Update(dt);
   // shooter->update(dt);
@@ -143,7 +146,7 @@ void Robot::AutonomousPeriodic() {
   // if (_auto.SnapStrat()->GetStrategyState() == StrategyState::RUNNING) {
   //   std::cout << "strategy running" << std::endl;
   // }
-  Schedule(_auto.Vision(*drivetrain));
+  // Schedule(_auto.Vision(*drivetrain));
 }
 
 // Manual Robot Logic
@@ -154,7 +157,7 @@ void Robot::TeleopInit() {
   Schedule(shooter->GetDefaultStrategy(), true);
   Schedule(intake->GetDefaultStrategy(), true);
   Schedule(climber->GetDefaultStrategy(), true);
-  Schedule(vision->GetDefaultStrategy(), true);
+  // Schedule(vision->GetDefaultStrategy(), true);
 }
 void Robot::TeleopPeriodic() {
 
@@ -168,13 +171,13 @@ void Robot::TeleopPeriodic() {
   } else {
     isAiming = false;
   }
-
-  // if (isDistance) {
-  //   Schedule(_auto.SnapStrat());
-  // }
-
-  if (isAiming) {
-    // Schedule(_auto.Vision(*drivetrain)); //incorrect 
+  
+  if (isAiming && !previousAiming) {
+    Schedule(_auto.Vision(*drivetrain)); //incorrect 
+  }
+  previousAiming = isAiming;
+  if (robotMap.contGroup.Get(ControlMap::visionCancel)) {
+    _auto.Vision(*drivetrain)->SetDone();
   }
 
   if (robotMap.contGroup.Get(ControlMap::GetOut, wml::controllers::XboxController::ONRISE)) {
