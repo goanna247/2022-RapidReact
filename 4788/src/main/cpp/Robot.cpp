@@ -2,6 +2,8 @@
 #include "Strategy/DrivetrainTrajectoryStrategy.h"
 #include "Strategy/DriveToDistanceStrategy.h"
 
+#include "Calibration/ShooterCalibration.h"
+
 using namespace frc;
 using namespace wml;
 
@@ -143,10 +145,7 @@ void Robot::AutonomousInit() {
   // std::cout << "TEST " << success << std::endl;
 }
 void Robot::AutonomousPeriodic() {
-  // if (_auto.SnapStrat()->GetStrategyState() == StrategyState::RUNNING) {
-  //   std::cout << "strategy running" << std::endl;
-  // }
-  // Schedule(_auto.Vision(*drivetrain));
+  Schedule(_auto.Vision(*drivetrain));
 }
 
 // Manual Robot Logic
@@ -199,5 +198,11 @@ void Robot::TeleopPeriodic() {
 }
 
 // During Test Logic
-void Robot::TestInit() {}
-void Robot::TestPeriodic() {}
+void Robot::TestInit() {
+  InterruptAll(true);
+  Schedule(std::make_shared<ShooterCalibration>("Turn to hub", *shooter, *intake , robotMap.photonCamera ,robotMap.contGroup));
+}
+
+void Robot::TestPeriodic() {
+  
+}

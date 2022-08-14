@@ -12,6 +12,7 @@
 #include "Auto.h"
 #include "Vision.h"
 
+#include "Calibration/Calibration.h"
 
 #include "Strategy/ShooterStrategy.h"
 #include "Strategy/IntakeStrategy.h"
@@ -61,7 +62,6 @@ public:
 
   void Update(double dt) override;
 
-private:
   RobotMap robotMap;
   Trajectories trajectories;
   wml::Drivetrain *drivetrain;
@@ -70,8 +70,9 @@ private:
   Climber *climber;
   Vision *vision;
 
-  frc::Relay light{0, frc::Relay::Direction::kForwardOnly};
+  // frc::Relay light{0, frc::Relay::Direction::kForwardOnly};
 
+ private:
   Auto _auto;
 
   bool outToggle = false;
@@ -80,8 +81,6 @@ private:
   bool isDistance = false;
   bool aimToggle = true;
   bool previousAiming = true;
-
-  wml::actuators::DoubleSolenoid lightRelay{ ControlMap::pcModule, wml::actuators::PneumaticsModuleType::kREV, 3, 7, 0.1, "ahhhh"};
 };
 
 

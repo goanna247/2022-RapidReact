@@ -3,6 +3,7 @@
 #include "Intake.h"
 #include "Shooter.h"
 #include "strategy/Strategy.h"
+#include "Robot.h"
 
 using Controllers = wml::controllers::SmartControllerGroup;
 

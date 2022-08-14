@@ -2,6 +2,7 @@
 #include <networktables/NetworkTableInstance.h>
 #include "Strategy/VisionAlignment.h"
 #include "ControlMap.h"
+#include "cmath"
 
 using namespace photonlib;
 
@@ -19,8 +20,8 @@ void VisionAlignment::OnUpdate(double dt) {
   double leftPower = 0, rightPower = 0;
 
   // photonCamera.photonLib::SetLED
-  std::cout << photonCamera.GetLEDMode() << std::endl;
-  photonCamera.SetLEDMode(LEDMode::kOn);
+  // std::cout << photonCamera.GetLEDMode() << std::endl;
+  // photonCamera.SetLEDMode(LEDMode::kOn);
 
   double xCords = _visionTable->GetEntry("targetPixelsX").GetDouble(0); 
   double yCords = _visionTable->GetEntry("targetPixelsY").GetDouble(0);
@@ -48,34 +49,25 @@ void VisionAlignment::OnUpdate(double dt) {
   _lastYaw = yawCords;
 }
 
-
-// -------- Shooting and Distance Vision Stuff -------- 
-
-
-VisionSnapStrat::VisionSnapStrat(std::string name) : wml::Strategy(name) {
+VisionDistance::VisionDistance(std::string name, Shooter &shooter) : wml::Strategy(name), _shooter(shooter) {
   SetCanBeInterrupted(true);
-  SetCanBeReused(true);
-  // Requires(&vision);
-  // SetPassive(true);
-  std::cout << "vision snap strat" << std::endl;
 }
 
-void VisionSnapStrat::OnUpdate(double dt) {
-  // std::cout << "Fuck" << std::endl;
-  // auto inst = nt::NetworkTableInstance::GetDefault();
-  // auto snapTable = inst.GetTable("Snap vision stuff");
-  // // snapTable->GetEntry("isOnTarget").SetBoolean(isInnerCircle);
+void VisionDistance::OnStart() {
 
-  // double pitch = _visionTable->GetEntry("targetPitch").GetDouble(0);
+}
 
-  // double newSpeed = (fixSpeed2-fixSpeed1)/(fixPitch2-fixPitch1)*(pitch-fixPitch1)+fixSpeed1;
-  // snapTable->GetEntry("newSpeed").SetDouble(newSpeed);
+void VisionDistance::OnUpdate(double dt) {
+  double launchAngle = 70;
+  double pitch = _visionTable->GetEntry("pitch").GetDouble(0); 
+  double tapeHeight = 2.605;
+  double ringHeight = 2.5;
 
+  double distanceToRing = 0.679+tapeHeight/tan(pitch*3.1416/180);  // Centre of ring in meters
+  double exitVelocity = pow(((-4.9*pow(distanceToRing, 2)) / (pow(cos(launchAngle*3.1416/180), 2))) / (ringHeight-tan(launchAngle*3.1416/180)*distanceToRing), 0.5);
+  double offSetFactor = 1.1; // of set function maybe linear?? Might be wrong
+  double exitAngularVelocity = ((exitVelocity/((3.1416*4*25.4)/1000)) * (2*3.1416)) * offSetFactor;  // radians per second (times exitAngularVelocity by of set value)
 
-  // if (pitch <= -18 && pitch >= -22) {
-  //   isInnerCircle = true;
-  //   std::cout << "inner target" << std::endl;
-  // } else {
-  //   isInnerCircle = false;
-  // }
-} //-20 inner circle
+  _shooter.calculatePID(exitAngularVelocity, dt);
+
+}

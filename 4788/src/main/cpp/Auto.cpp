@@ -6,6 +6,7 @@
 #include "Strategy/VisionAlignment.h"
 #include "Strategy/IntakeStrategy.h"
 #include "Strategy/ShooterStrategy.h"
+#include "Calibration/ShooterCalibration.h"
 
 std::shared_ptr<wml::Strategy> Auto::FiveBallTerminal(wml::Drivetrain &drivetrain, Intake &intake, Shooter &shooter) {
   auto autoStrat = wml::StrategyBuilder{}.Start() //TODO set timeout to last intake in case of shoddy HP
@@ -113,32 +114,3 @@ std::shared_ptr<wml::Strategy> Auto::TurningTest(wml::Drivetrain &drivetrain, In
     ->Build();
   return autoStrat;
 };
-
-std::shared_ptr<wml::Strategy> Auto::SnapStratTest() {
-  auto autoStrat = wml::StrategyBuilder{}.Start()
-    ->Add(std::make_shared<VisionSnapStrat>("Align"))
-    ->Build();
-  return autoStrat;
-};
-
-// std::shared_ptr<wml::Strategy> Auto::SnapStrat() {
-//   auto autoStrat = wml::StrategyBuilder{}.Start()
-//     ->Add(std::make_shared<VisionSnapStrat>("distace"))
-//     ->Build();
-//   return autoStrat;
-// };
-
-
-// void someFunction() {
-//   auto autoStrat = StrategyBuilder{}.Start()
-//     ->Add<DriveToDistanceStrategy>("Move to Ball 1", *drivetrain, trajectory)
-//     ->Add<DrivetrainAngleStrategy>("Shoot", *shooter)
-//     ->Then()
-//     ->Add<VisionStrat>("Align", *drivetrain, *vision)
-//     ->Then()
-//     ->Add<DriveTrainStrat>("Move", *drivetrain, trajectory)
-//     ->Build();
-  
-//   Schedule(autoStart);
-// }
-

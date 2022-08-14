@@ -53,6 +53,9 @@
 #include <sensors/BinarySensor.h>
 #include <rev/CANSparkMax.h>
 
+#include <photonlib/PhotonCamera.h>
+#include <photonlib/PhotonUtils.h>
+
 // #include "MP_Trajedy.h"
 
 // WML Rev
@@ -72,6 +75,11 @@ struct RobotMap {
   wml::controllers::XboxController xbox2{ ControlMap::xbox2Port };
   wml::controllers::XboxController xbox3{ ControlMap::xbox3Port };
   wml::controllers::SmartControllerGroup contGroup{ xbox1, xbox2, xbox3};
+
+  /**
+   * Vision
+   */
+  photonlib::PhotonCamera photonCamera{"Harry"};
 
   /**
    * Robot Control System

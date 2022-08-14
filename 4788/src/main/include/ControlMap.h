@@ -135,4 +135,10 @@ struct ControlMap {
   inline static const wml::controllers::tButton GetOutBoogalloo{ driver, wml::controllers::XboxController::kA };
 
   inline static const wml::controllers::tButton Distance{ driver, wml::controllers::XboxController::kBumperLeft};
+
+  //calibration 
+  inline static const wml::controllers::tButton DriveWaitOk{ tester, wml::controllers::XboxController::kA};
+  inline static const wml::controllers::tButton DriveWaitDone{ tester, wml::controllers::XboxController::kX};
+  inline static const wml::controllers::tButton DriverConfirmHit{ tester, wml::controllers::XboxController::kA};
+  inline static const wml::controllers::tButton DriverConfirmMiss{ tester, wml::controllers::XboxController::kB};
 };
