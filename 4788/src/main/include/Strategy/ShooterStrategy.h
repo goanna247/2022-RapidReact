@@ -13,6 +13,10 @@ class ShooterManualStrategy : public wml::Strategy {
   void OnUpdate(double dt) override;
  private:
   Shooter &_shooter;
+  double visionTarget;
+  double visionSpeedGive;
+  // bool hasValue;
+  std::shared_ptr<nt::NetworkTable> _visionTable = nt::NetworkTableInstance::GetDefault().GetTable("photonvision/visionCam");
   Controllers &_contGroup;
 };
 

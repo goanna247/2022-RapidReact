@@ -18,9 +18,9 @@ struct ControlMap {
     contGroup.GetController(ControlMap::shoot.cont).Map(ControlMap::shoot, {
       { Controller::POVPos::kLeft, ControlMap::farShoot },
       { Controller::POVPos::kRight, ControlMap::noahShoot },
-      { Controller::POVPos::kBottom, ControlMap::shooterEject },
-      { Controller::POVPos::kBottom, ControlMap::indexManualToggleButton},
-      { Controller::POVPos::kTop, ControlMap::indexManualStop },
+      { Controller::POVPos::kTop, ControlMap::shooterEject },
+      { Controller::POVPos::kBottom, ControlMap::indexManualToggleButton}, //driver
+      { Controller::POVPos::kBottom, ControlMap::indexManualStop },
     });
   }
 
@@ -73,8 +73,8 @@ struct ControlMap {
     inline static bool shooterPID = false;
 
     inline static double shooterEjectPower = 0.8;
-    inline static double innerCircleShootValue = 225;
-    inline static double outerCircleShootValue = 300;
+    inline static double innerCircleShootValue = 200;
+    inline static double outerCircleShootValue = 250;
     inline static double farShootValue = 400;
     inline static double noahShootValue = 500;
   };
@@ -97,6 +97,8 @@ struct ControlMap {
 
   // Shooter
   inline static const wml::controllers::tAxis manualFlyWheel{ coDriver, XboxController::kLeftThrottle }; //used for manual control or testing the shooter
+  inline static const wml::controllers::tAxis manualFlyBack{ coDriver, XboxController::kRightThrottle }; //used for manual control or testing the shooter
+
   inline static const wml::controllers::tButton innerCircleShoot{ coDriver, XboxController::kBumperLeft };
   inline static const wml::controllers::tButton outerCircleShoot{ coDriver, XboxController::kBumperRight };
 
@@ -115,13 +117,15 @@ struct ControlMap {
   inline static const wml::controllers::tButton visionCancel{ driver, XboxController::kBumperLeft};
 
   // Climber
-  inline static const wml::controllers::tButton climberActuate{ coDriver, wml::controllers::XboxController::kY };
+  // inline static const wml::controllers::tButton climberActuate{ driver, wml::controllers::XboxController::kBumperRight };
+  inline static const wml::controllers::tButton climberActuate{ driver, wml::controllers::XboxController::kX };
 
   // Intake
   inline static const wml::controllers::tAxis intake{ coDriver, wml::controllers::XboxController::kLeftYAxis };
   inline static const wml::controllers::tButton intakeActuation{ coDriver, wml::controllers::XboxController::kB };
 
-  inline static const wml::controllers::tButton indexManualToggleButton{ driver, wml::controllers::XboxController::kX };
+  // inline static const wml::controllers::tButton indexManualToggleButton{ driver, wml::controllers::XboxController::kX };
+  inline static const wml::controllers::tButton indexManualToggleButton{ driver, __LINE__ + 30 };
   inline static const wml::controllers::tButton indexManualStop{ driver, wml::controllers::XboxController::kB };
 
   inline static const wml::controllers::tButton intakeManualToggle{ coDriver, wml::controllers::XboxController::kA };
@@ -141,4 +145,6 @@ struct ControlMap {
   inline static const wml::controllers::tButton DriveWaitDone{ tester, wml::controllers::XboxController::kX};
   inline static const wml::controllers::tButton DriverConfirmHit{ tester, wml::controllers::XboxController::kA};
   inline static const wml::controllers::tButton DriverConfirmMiss{ tester, wml::controllers::XboxController::kB};
+
+  inline static const wml::controllers::tButton TestShoot{ tester, wml::controllers::XboxController::kBumperLeft};
 };

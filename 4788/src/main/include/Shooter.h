@@ -39,6 +39,8 @@ class Shooter : public wml::StrategySystem, public wml::loops::LoopSystem {
 
   void GetOut(double dt, double power);
 
+  double returnSpeed();
+
   void SetIsDoneThreshold(double threshAvgPos, double threshAvgVel);
   bool isDone();
 

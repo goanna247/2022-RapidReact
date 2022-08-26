@@ -21,14 +21,17 @@ void Robot::RobotInit() {
   //Init the controllers
   ControlMap::InitSmartControllerGroup(robotMap.contGroup);
 
-  auto camera = CameraServer::GetInstance()->StartAutomaticCapture(0);
-  camera.SetFPS(30);
-  camera.SetResolution(160, 120);
+  // auto camera = CameraServer::GetInstance()->StartAutomaticCapture(0);
+  // camera.SetFPS(30);
+  // camera.SetResolution(160, 120);
 
   shooter = new Shooter(robotMap.shooterSystem, robotMap.contGroup);
+  robotMap.shooterSystem.leftFlyWheelMotor.SetInverted(true);
+  robotMap.shooterSystem.centerFlyWheelMotor.SetInverted(true);
+  robotMap.shooterSystem.rightFlyWheelMotor.SetInverted(true);
   shooter->SetDefault(std::make_shared<ShooterManualStrategy>("Shooter teleop strategy", *shooter, robotMap.contGroup));
 
-  robotMap.shooterSystem.shooterGearbox.transmission->SetInverted(true);
+  // robotMap.shooterSystem.shooterGearbox.transmission->SetInverted(true);
   shooter->StartLoop(100);
 
   intake = new Intake(robotMap.intakeSystem, robotMap.contGroup);
@@ -36,6 +39,7 @@ void Robot::RobotInit() {
   intake->StartLoop(100);
   robotMap.intakeSystem.intake.SetInverted(true);
   robotMap.intakeSystem.indexWheel.SetInverted(true);
+  // robotMap.intakeSystem.intake.configStatorCurrentLimit(new StatorCurrentLimitConfiguration(true,20, 25, 1.0));
 
   climber = new Climber(robotMap.climberSystem, robotMap.contGroup);
   climber->SetDefault(std::make_shared<ClimberStrategy>("climber manual strategy", *climber, robotMap.contGroup));
@@ -61,6 +65,8 @@ void Robot::RobotInit() {
   //Invert one side of our drivetrain so it'll drive straight
   drivetrain->GetConfig().leftDrive.transmission->SetInverted(true);
   drivetrain->GetConfig().rightDrive.transmission->SetInverted(false);
+
+  // drivetrain->GetConfig().rightDrive.encoder->SetInverted(true);
 
   // light.
 
@@ -141,11 +147,16 @@ void Robot::AutonomousInit() {
   // auto testStrat = std::make_shared<DrivetrainAngleStrategy>("testStrat", *drivetrain, 90.0);
 
   // bool success = Schedule(_auto.SnapStrat());
-
+  // Schedule(_auto.DriveTest(*drivetrain, *intake, *shooter));
+  // Schedule(_auto.OneTwoBallAuto(*drivetrain, *intake, *shooter, robotMap.contGroup));
   // std::cout << "TEST " << success << std::endl;
 }
 void Robot::AutonomousPeriodic() {
-  Schedule(_auto.Vision(*drivetrain));
+  // Schedule(_auto.Vision(*drivetrain, robotMap.contGroup));
+  // Schedule(_auto.OneTwoBallAuto(*drivetrain, *intake, *shooter));
+  // std::cout << "Left encoder: " << robotMap.drivebaseSystem.LGearbox.encoder->GetEncoderRotations() << std::endl;
+  // std::cout << "Right encoder: " << robotMap.drivebaseSystem.RGearbox.encoder->GetEncoderRotations() << std::endl;
+
 }
 
 // Manual Robot Logic
@@ -159,6 +170,8 @@ void Robot::TeleopInit() {
   // Schedule(vision->GetDefaultStrategy(), true);
 }
 void Robot::TeleopPeriodic() {
+  std::cout << "Left encoder: " << robotMap.drivebaseSystem.LGearbox.encoder->GetEncoderRotations() << std::endl;
+  std::cout << "Right encoder: " << robotMap.drivebaseSystem.RGearbox.encoder->GetEncoderRotations() << std::endl;
 
   // if (robotMap.contGroup.Get(ControlMap::Distance)) {
   //   isDistance = true;
@@ -172,11 +185,11 @@ void Robot::TeleopPeriodic() {
   }
   
   if (isAiming && !previousAiming) {
-    Schedule(_auto.Vision(*drivetrain)); //incorrect 
+    Schedule(_auto.Vision(*drivetrain, robotMap.contGroup)); //incorrect 
   }
   previousAiming = isAiming;
   if (robotMap.contGroup.Get(ControlMap::visionCancel)) {
-    _auto.Vision(*drivetrain)->SetDone();
+    _auto.Vision(*drivetrain, robotMap.contGroup)->SetDone();
   }
 
   if (robotMap.contGroup.Get(ControlMap::GetOut, wml::controllers::XboxController::ONRISE)) {
@@ -200,7 +213,8 @@ void Robot::TeleopPeriodic() {
 // During Test Logic
 void Robot::TestInit() {
   InterruptAll(true);
-  Schedule(std::make_shared<ShooterCalibration>("Turn to hub", *shooter, *intake , robotMap.photonCamera ,robotMap.contGroup));
+  Schedule(std::make_shared<ShooterCalibration>("Turn to hub", *shooter, *intake , robotMap.photonCamera ,robotMap.contGroup, robotMap));
+  // Schedule(intake->GetDefaultStrategy(), true);
 }
 
 void Robot::TestPeriodic() {

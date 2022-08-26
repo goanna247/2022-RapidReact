@@ -1,5 +1,7 @@
 #include "Strategy/ShooterStrategy.h"
 #include <iostream>
+#include "frc/RobotController.h"
+
 
 ShooterManualStrategy::ShooterManualStrategy(std::string name, Shooter &shooter, Controllers &contGroup) : Strategy(name), _shooter(shooter), _contGroup(contGroup) {
   SetCanBeInterrupted(true);
@@ -9,6 +11,20 @@ ShooterManualStrategy::ShooterManualStrategy(std::string name, Shooter &shooter,
 
 void ShooterManualStrategy::OnUpdate(double dt) {
   double manualFlyWheelPower = fabs(_contGroup.Get(ControlMap::manualFlyWheel)) > fabs(ControlMap::xboxDeadzone) ? _contGroup.Get(ControlMap::manualFlyWheel) : 0;
+  // visionTarget = -8.88 * nt::NetworkTableInstance::GetDefault().GetTable("visionFilter")->GetEntry("filteredPitch").GetDouble(0);
+  // visionTarget = 446 * _visionTable->GetEntry("targetArea").GetDouble(0) + -3.97 * _visionTable->GetEntry("targetPitch").GetDouble(0);
+  
+  
+  // visionTarget = 13.3367 * _visionTable->GetEntry("targetArea").GetDouble(0) + 0.5548 * _visionTable->GetEntry("targetPitch").GetDouble(0) + 0.2271 * _visionTable->GetEntry("targetYaw").GetDouble(0) + 19.5029 * frc::RobotController::GetBatteryVoltage().value();
+
+  // if ((_visionTable->GetEntry("targetArea").GetDouble(0) != 0 && _visionTable->GetEntry("targetPitch").GetDouble(0) != 0 && _visionTable->GetEntry("targetYaw").GetDouble(0) != 0) && visionTarget > visionSpeedGive) {
+  //   visionSpeedGive = visionTarget;
+  // }
+  // if (_visionTable->GetEntry("targetArea").GetDouble(0) != 0 && _visionTable->GetEntry("targetPitch").GetDouble(0)) {
+  //   visionSpeedGive = visionTarget;
+  // }
+  // std::cout << visionSpeedGive << std::endl;
+
 
   if (_contGroup.Get(ControlMap::innerCircleShoot)) {
     _shooter.setPID(ControlMap::Shooter::innerCircleShootValue, dt);
@@ -22,7 +38,16 @@ void ShooterManualStrategy::OnUpdate(double dt) {
     _shooter.setPID(ControlMap::Shooter::noahShootValue, dt);
   } else if (_contGroup.Get(ControlMap::GetOutBoogalloo)) {
     _shooter.setManual(-1 * 12);
-  } else {
+  } 
+  // else if (_contGroup.Get(ControlMap::TestShoot)) {
+  //   _shooter.setPID(visionSpeedGive, dt);
+  // }
+  else if (_contGroup.Get(ControlMap::manualFlyBack) > 0.1) {
+    manualFlyWheelPower = fabs(_contGroup.Get(ControlMap::manualFlyBack)) > fabs(ControlMap::xboxDeadzone) ? _contGroup.Get(ControlMap::manualFlyBack) : 0;
+    _shooter.setManual(-manualFlyWheelPower * 12);
+  }
+  
+  else {
     // auto &motor = _shooter._shooterSystem.shooterGearbox.motor;
     _shooter.setManual(manualFlyWheelPower * 12);
   }

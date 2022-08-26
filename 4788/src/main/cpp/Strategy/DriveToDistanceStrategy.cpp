@@ -9,7 +9,7 @@ static wml::control::PIDGains &getAngleGains() {
 };
 
 static wml::control::PIDGains &getDistanceGains() {
-  static wml::control::PIDGains gains{"DistanceStratGains", 1.2, 0.4, 0, 0.06};
+  static wml::control::PIDGains gains{"DistanceStratGains", 0.3, 0.4, 0, 0.06};
   return gains;
 };
 
@@ -42,6 +42,10 @@ void DriveToDistanceStrategy::OnUpdate(double dt) {
 
   double leftRotations = _drivetrain.GetConfig().leftDrive.encoder->GetEncoderRotations()/_drivetrain.GetConfig().leftDrive.reduction;
   double rightRotations = _drivetrain.GetConfig().rightDrive.encoder->GetEncoderRotations()/_drivetrain.GetConfig().rightDrive.reduction;
+
+  // double leftRotations = _drivetrain.GetConfig().leftDrive.encoder->GetEncoderRotations();
+  // double rightRotations = _drivetrain.GetConfig().rightDrive.encoder->GetEncoderRotations();
+
   double averageRotations = (leftRotations-rightRotations)/2;
   double gyro = _drivetrain.GetConfig().gyro->GetAngle();
   
@@ -55,6 +59,11 @@ void DriveToDistanceStrategy::OnUpdate(double dt) {
   distPID = std::max(-_accSpeed, std::min(_accSpeed, distPID));
   leftPower = distPID;
   rightPower = distPID;
+
+  // std::cout << "Goal: " << _goal << std::endl;
+  // std::cout << "Average Rotations: " << averageRotations << std::endl;
+  // std::cout << "Right Rotiations: " << rightRotations << std::endl;
+  // std::cout << "distance: " << distance << std::endl;
 
   double output = _anglePID.Calculate(gyro, dt, 1.0);
   // double output = _control.getAnglePID().calculate(gyro, _heading, dt);

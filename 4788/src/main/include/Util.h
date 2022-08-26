@@ -26,3 +26,17 @@ class Debounce {
   bool _lastState;
   double _lastChange, _time;
 };
+
+class RisingEdge {
+ public:
+  RisingEdge() : lastState(true) {}
+
+  bool Get(bool currentState) {
+    bool val = currentState && !lastState;
+    lastState = currentState;
+    return val;
+  }
+
+ private:
+  bool lastState;
+};

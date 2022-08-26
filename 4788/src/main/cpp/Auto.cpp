@@ -92,25 +92,40 @@ std::shared_ptr<wml::Strategy> Auto::ThreeBallHanger(wml::Drivetrain &drivetrain
   return autoStrat;
 };
 
-std::shared_ptr<wml::Strategy> Auto::OneTwoBallAuto(wml::Drivetrain &drivetrain, Intake &intake, Shooter &shooter) {
+std::shared_ptr<wml::Strategy> Auto::OneTwoBallAuto(wml::Drivetrain &drivetrain, Intake &intake, Shooter &shooter, Controllers &contGroup) {
   auto autoStrat = wml::StrategyBuilder{}.Start()
-    ->Add(std::make_shared<DriveToDistanceStrategy>("Move to ball 1", drivetrain, 1.6))
+    ->Add(std::make_shared<IntakeAutoStrategy>("Intake Ball2", intake, true))
+    ->Add(std::make_shared<DriveToDistanceStrategy>("Move to ball 1", drivetrain, 1.5))
+    ->Add(std::make_shared<ShooterSpinUpStrategy>("spin up shooter", shooter, 250))
+    // ->Add(std::make_shared<DrivetrainAngleStrategy>("Turn to hub", drivetrain, 10.750)) //change into vision strat
     ->Then()
-    ->Add(std::make_shared<DrivetrainAngleStrategy>("Turn to hub", drivetrain, 10.750))
+    // ->Add(std::make_shared<VisionAlignment>("Align", drivetrain, false, contGroup))
+    ->Add(std::make_shared<VisionAutoAlignment>("vision auto align", drivetrain))
+    ->Add(std::make_shared<ShooterSpinUpStrategy>("spin up shooter", shooter, 250))
+    ->Then()
+    ->Add(std::make_shared<ShooterShootStrategy>("shoot 2 balls", shooter, intake, 252))
     ->Build();
   return autoStrat;
 };
 
-std::shared_ptr<wml::Strategy> Auto::Vision(wml::Drivetrain &drivetrain) {
+std::shared_ptr<wml::Strategy> Auto::Vision(wml::Drivetrain &drivetrain, Controllers &contGroup) {
   auto autoStrat = wml::StrategyBuilder{}.Start()
-    ->Add(std::make_shared<VisionAlignment>("Align", drivetrain, false))
+    ->Add(std::make_shared<VisionAlignment>("Align", drivetrain, false, contGroup))
     ->Build();
   return autoStrat;
 };
 
-std::shared_ptr<wml::Strategy> Auto::TurningTest(wml::Drivetrain &drivetrain, Intake &intake, Shooter &shooter) {
+std::shared_ptr<wml::Strategy> Auto::TurningTest(wml::Drivetrain &drivetrain, Intake &intake, Shooter &shooter, Controlllers &contGroup) {
   auto autoStrat = wml::StrategyBuilder{}.Start()
     ->Add(std::make_shared<DrivetrainAngleStrategy>("Turn to hub", drivetrain, 10))
+    ->Build();
+  return autoStrat;
+};
+
+
+std::shared_ptr<wml::Strategy> Auto::DriveTest(wml::Drivetrain &drivetrain, Intake &intake, Shooter &shooter) {
+  auto autoStrat = wml::StrategyBuilder{}.Start()
+    ->Add(std::make_shared<DriveToDistanceStrategy>("drive", drivetrain, 1.0))
     ->Build();
   return autoStrat;
 };

@@ -6,7 +6,7 @@
 
 using namespace photonlib;
 
-VisionAlignment::VisionAlignment(std::string name, Drivetrain &drivetrain, bool track) : wml::Strategy(name), _drivetrain(drivetrain), _drivetrainAngleStrategy("VisionAngle", drivetrain, _lastYaw), _track(track){
+VisionAlignment::VisionAlignment(std::string name, Drivetrain &drivetrain, bool track, Controllers &contGroup) : wml::Strategy(name), _drivetrain(drivetrain), _drivetrainAngleStrategy("VisionAngle", drivetrain, _lastYaw), _track(track), _contGroup(contGroup){
   Requires(&drivetrain);
   SetCanBeInterrupted(true);
 }
@@ -32,7 +32,7 @@ void VisionAlignment::OnUpdate(double dt) {
   // 3.21m 
 
   if (std::abs(yawCords - _lastYaw) > 0.005)
-    _drivetrainAngleStrategy.SetGoal(gyro + yawCords);
+    _drivetrainAngleStrategy.SetGoal((gyro + yawCords) - 5);
 
   _drivetrainAngleStrategy.OnUpdate(dt);
 
@@ -46,7 +46,57 @@ void VisionAlignment::OnUpdate(double dt) {
   std::cout << "yawCord: " << yawCords << std::endl;
   std::cout << "gyro: " << gyro << std::endl;
 
+  if (_contGroup.Get(ControlMap::visionCancel, wml::controllers::XboxController::ONRISE)) {
+    Interrupt();
+  }
+
   _lastYaw = yawCords;
+}
+
+
+VisionAutoAlignment::VisionAutoAlignment(std::string name, Drivetrain &drivetrain) : wml::Strategy(name), _drivetrain(drivetrain), _drivetrainAngleStrategy("VisionAngle", drivetrain, _lastYaw) {
+  Requires(&drivetrain);
+  SetCanBeInterrupted(true);
+}
+
+void VisionAutoAlignment::OnStart() {
+  // _drivetrainAngleStrategy.OnStart();
+}
+
+void VisionAutoAlignment::OnUpdate(double dt) {
+  // double leftPower = 0, rightPower = 0;
+  // VisionAlignmentTimer.Start();
+
+  // double xCords = _visionTable->GetEntry("targetPixelsX").GetDouble(0); 
+  // double yCords = _visionTable->GetEntry("targetPixelsY").GetDouble(0);
+  // double yawCords = _visionTable->GetEntry("targetYaw").GetDouble(0);
+  // double gyro = _drivetrain.GetConfig().gyro->GetAngle();
+  // double isFinished = _visionTable->GetEntry("Is finished").SetBoolean(_drivetrainAngleStrategy.IsFinished());
+
+  // // 3.21m 
+
+  // if (std::abs(yawCords - _lastYaw) > 0.005)
+  //   _drivetrainAngleStrategy.SetGoal((gyro + yawCords) - 10);
+
+  // _drivetrainAngleStrategy.OnUpdate(dt);
+
+  // if (VisionAlignmentTimer.Get() >= 5_s) {
+  //   VisionAlignmentTimer.Stop();
+  //   VisionAlignmentTimer.Reset();
+  //   SetDone();
+  // } 
+
+  // // if (!_track) {
+  //   if (_drivetrainAngleStrategy.IsFinished())
+  //     SetDone();
+  // // }
+
+  // // nt::NetworkTableInstance::GetDefault().GetTable("testVisionTable")->GetEntry("lastYaw").SetDouble(_lastYaw);
+
+  // std::cout << "yawCord: " << yawCords << std::endl;
+  // std::cout << "gyro: " << gyro << std::endl;
+
+  // _lastYaw = yawCords;
 }
 
 VisionDistance::VisionDistance(std::string name, Shooter &shooter) : wml::Strategy(name), _shooter(shooter) {

@@ -54,16 +54,18 @@ void Shooter::updateShooter(double dt) {
   }
 
   if (_state != ShooterState::kRaw) {
-    double angularVel = -_shooterSystem.shooterGearbox.encoder->GetEncoderAngularVelocity();
-    auto &motor = _shooterSystem.shooterGearbox.motor;
-    double Vmax = ControlMap::ShooterGains::IMax * motor.R() + motor.kw() * angularVel;
-    double Vmin = -(ControlMap::ShooterGains::IMax) * motor.R() + motor.kw() * angularVel;
-    manualOutput = std::min(_flyWheelVoltage, Vmax);
+    // double angularVel = -_shooterSystem.shooterGearbox.encoder->GetEncoderAngularVelocity();
+    // auto &motor = _shooterSystem.shooterGearbox.motor;
+    // double Vmax = ControlMap::ShooterGains::IMax * motor.R() + motor.kw() * angularVel;
+    // double Vmin = -(ControlMap::ShooterGains::IMax) * motor.R() + motor.kw() * angularVel;
+    // // manualOutput = std::min(_flyWheelVoltage, Vmax);
+    manualOutput = _flyWheelVoltage;
   }
 
   nt::NetworkTableInstance::GetDefault().GetTable("shooter gains")->GetEntry("Vout").SetDouble(manualOutput);
   nt::NetworkTableInstance::GetDefault().GetTable("shooter gains")->GetEntry("isDone").SetBoolean(isDone());
 
+  std::cout << "manual output" << manualOutput << std::endl;
   _shooterSystem.shooterGearbox.transmission->SetVoltage(manualOutput);
 }
 
@@ -72,9 +74,12 @@ void Shooter::Update(double dt) {
   updateShooter(dt);
 }
 
+double Shooter::returnSpeed() {
+  return _shooterSystem.shooterGearbox.encoder->GetEncoderAngularVelocity();
+}
 
 double Shooter::calculatePID(double angularVelocity, double dt) {
-  double input = -(_shooterSystem.shooterGearbox.encoder->GetEncoderAngularVelocity());
+  double input = (_shooterSystem.shooterGearbox.encoder->GetEncoderAngularVelocity());
   double error = angularVelocity - input;
   double derror = (error - _previousError) / dt;
   _sum += error * dt;

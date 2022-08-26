@@ -56,6 +56,8 @@
 #include <photonlib/PhotonCamera.h>
 #include <photonlib/PhotonUtils.h>
 
+// #include <phoenix/motorcontrol.h>
+
 // #include "MP_Trajedy.h"
 
 // WML Rev
@@ -100,13 +102,13 @@ struct RobotMap {
     wml::SparkMax centerFlyWheelMotor{ ControlMap::Shooter::centerFlyWheelPort, wml::SparkMax::MotorType::kNEO, 42};
 
     wml::actuators::MotorVoltageController shooterMotorGroup = wml::actuators::MotorVoltageController::Group(
-      leftFlyWheelMotor,
-      rightFlyWheelMotor,
+      leftFlyWheelMotor,//going the wrong directin NNEDS INVERTING
+      rightFlyWheelMotor, //yes out 
       centerFlyWheelMotor
     );
     wml::Gearbox shooterGearbox{
       &shooterMotorGroup,
-      &rightFlyWheelMotor,
+      &leftFlyWheelMotor,
       1.0, 
       mNEO * 3
     };
@@ -135,7 +137,7 @@ struct RobotMap {
   }; DrivebaseSystem drivebaseSystem;
 
   struct IntakeSystem {
-    wml::TalonSrx intake{ControlMap::Intake::intakeMotorPort, 2048};
+    wml::VictorSpx intake{ControlMap::Intake::intakeMotorPort};
     wml::actuators::DoubleSolenoid intakeSolenoid{ ControlMap::pcModule, wml::actuators::PneumaticsModuleType::kREV, ControlMap::Intake::intakeSolenoidPort, ControlMap::Intake::intakeSolenoidPort2, 0.1, "CJ"};
     wml::TalonSrx indexWheel{ ControlMap::Shooter::indexMotorPort, 2048};
     wml::sensors::LimitSwitch intakeBallSensor{0, false, "kee-an"}; //ball sensor
